@@ -1,0 +1,12 @@
+
+
+To run Job :
+
+python3 -m \
+    apache_beam.examples.wordcount \
+    --region us-central1 \
+    --input gs://dataflow-samples/shakespeare/kinglear.txt \
+    --output gs://mynewdevenv-bucket/results/output \
+    --runner DataflowRunner \
+    --project mynewdevenv \
+    --temp_location gs://mynewdevenv-bucket/temp/
