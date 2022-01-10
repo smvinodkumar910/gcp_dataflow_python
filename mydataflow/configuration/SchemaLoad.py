@@ -7,9 +7,15 @@ import sys
 
 class SchemaLoad :
 
-    def readfile():
-        filename = sys.argv[1]
+    #returns schema as dict
+    def getSchema(filename:str)->dict:
         r = open(os.path.join(ROOT_DIR, 'resources', filename))
+        data = dict(json.load(r))
+        return data
+    
+    #returns fields names as a list
+    def getFieldList():
+        r = open(os.path.join(ROOT_DIR, 'resources', 'ANNUAL_ENTERPRISE_SURVEY.json'))
         data = dict(json.load(r))
         r.close
         fieldList = list(data.get('fields'))
@@ -17,18 +23,9 @@ class SchemaLoad :
         for a in fieldList:
             field = dict(a)
             listofNames.append(field.get('name'))
-        print(listofNames)
+        return listofNames
 
-    def getSchema()->dict:
-        filename = sys.argv[1]
-        r = open(os.path.join(ROOT_DIR, 'resources', filename))
-        data = dict(json.load(r))
-        return data
 
-def getSchema(filename:str)->dict:
-        r = open(os.path.join(ROOT_DIR, 'resources', filename))
-        data = dict(json.load(r))
-        return data
 
 if __name__ == '__main__':
     SchemaLoad.readfile()
