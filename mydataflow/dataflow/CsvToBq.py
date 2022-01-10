@@ -27,8 +27,11 @@ import apache_beam as beam
 from apache_beam.io import ReadFromText
 from apache_beam.io import WriteToText
 from apache_beam.io import WriteToBigQuery
+from apache_beam.io.gcp.bigquery import BigQueryDisposition
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
+
+from mydataflow.configuration.SchemaLoad import getSchema
 
 import os
 
@@ -51,12 +54,13 @@ class CsvToJsonDoFn(beam.DoFn):
 
 def run(argv=None, save_main_session=True):
   
+
   """Main entry point; defines and runs the wordcount pipeline."""
   parser = argparse.ArgumentParser()
   parser.add_argument(
       '--input',
       dest='input',
-      default='gs://dataflow-samples/shakespeare/kinglear.txt',
+      default='gs://mynewdevenv-bucket/SourceFiles/annual-enterprise-survey-2020.csv',
       help='Input file to process.')
   
   known_args, pipeline_args = parser.parse_known_args(argv)
@@ -65,16 +69,19 @@ def run(argv=None, save_main_session=True):
   # workflow rely on global context (e.g., a module imported at module level).
   pipeline_options = PipelineOptions(pipeline_args)
   pipeline_options.view_as(SetupOptions).save_main_session = save_main_session
-
+  
   # The pipeline will be run on exiting the with block.
   with beam.Pipeline(options=pipeline_options) as p:
 
     # Read the text file[pattern] into a PCollection.
     lines = p | 'Read' >> ReadFromText(known_args.input)
     dicts = lines | 'Convert to Dicts' >> (beam.ParDo(CsvToJsonDoFn()).with_output_types(dict))
-    dicts | 'write to bigquery' >> beam.io.WriteToBigQuery(table=)
+    dicts | 'write to bigquery' >> beam.io.WriteToBigQuery( table='mynewdevenv:DATAFLOW_LOAD.API_PARAMETER_TEST' ,
+    schema= getSchema(), create_disposition=BigQueryDisposition.CREATE_IF_NEEDED,
+    write_disposition=BigQueryDisposition.WRITE_APPEND)
 
 
 if __name__ == '__main__':
   logging.getLogger().setLevel(logging.INFO)
-  run()
+  schema=getSchema('ANNUAL_ENTERPRISE_SURVEY.json')
+  print(schema)
