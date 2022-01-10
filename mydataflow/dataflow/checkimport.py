@@ -22,6 +22,7 @@ def runmethod():
             break;
         else:
             colval = row[startind:splitind]
+            print(colval)
             if ('"' in colval):
                 if(quotecolstr==0):
                     quotecolstr=startind
@@ -30,9 +31,15 @@ def runmethod():
                 else:
                     colval = row[quotecolstr:splitind]
                     valuelist.append(colval.replace('"',''))
+                    quotecolstr=0
             else:
+                if quotecolstr!=0:
+                    startind=splitind+1
+                    continue;
+                startind=splitind+1
                 valuelist.append(colval)
-            startind=splitind+1
+                
+            
 
     print(valuelist)
     
