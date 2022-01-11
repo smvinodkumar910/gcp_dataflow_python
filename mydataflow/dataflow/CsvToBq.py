@@ -22,6 +22,7 @@
 import argparse
 import logging
 import re
+from typing import Dict
 
 import apache_beam as beam
 from apache_beam.io import ReadFromText
@@ -59,7 +60,7 @@ class CsvToJsonDoFn(beam.DoFn):
       
     fieldList = sl.getFieldList(filename)
     rowAsDict = dict(zip(fieldList, colval))
-    return rowAsDict
+    return [rowAsDict]
 
 
 def run(argv=None, save_main_session=True):
@@ -84,7 +85,7 @@ def run(argv=None, save_main_session=True):
   with beam.Pipeline(options=pipeline_options) as p:
 
     # Read the text file[pattern] into a PCollection.
-    lines = p | 'Read' >> ReadFromText(known_args.input)
+    lines = p | 'Read' >> ReadFromText(known_args.input, skip_header_lines =1)
     dicts = lines | 'Convert to Dicts' >> (beam.ParDo(CsvToJsonDoFn()))
     dicts | 'write to bigquery' >> beam.io.WriteToBigQuery( table='mynewdevenv:DATAFLOW_LOAD.ANNUAL_ENTERPRISE_SURVEY' ,
     schema= sl.getSchema(filename), create_disposition=BigQueryDisposition.CREATE_IF_NEEDED,

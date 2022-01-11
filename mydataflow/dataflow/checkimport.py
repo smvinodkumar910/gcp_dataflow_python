@@ -2,6 +2,10 @@
 import mydataflow.configuration.pathconfig as config
 from mydataflow.configuration.SchemaLoad import SchemaLoad as sl
 import os
+import mydataflow.Utilities.StringOperations as so
+
+
+filename = 'ANNUAL_ENTERPRISE_SURVEY.json'
 
 
 def csvStringToDict():
@@ -9,10 +13,33 @@ def csvStringToDict():
     with open(filepath) as file:
         filelines = file.readlines()
     row = filelines[1]
-    vallist = splitIntoVal(row,',','"')
-    rowAsDict = dict(zip(sl.getFieldList('ANNUAL_ENTERPRISE_SURVEY.json'), vallist))
     print(row)
+    rowAsDict = process(row)
+    #vallist = splitIntoVal(row,',','"')
+    #rowAsDict = dict(zip(sl.getFieldList('ANNUAL_ENTERPRISE_SURVEY.json'), vallist))
+    #print(row)
     print(rowAsDict)
+
+def process(element:str):
+    """Returns an iterator over the words of this element.
+
+    The element is a line of text.  If the line is blank, note that, too.
+
+    Args:
+      element: the element being processed
+
+    Returns:
+      The processed element.
+    """
+    colval=[]
+    if '"' in element:
+      colval=so.splitIntoVal(element,',','"')
+    else:
+      colval=element.split(',')
+      
+    fieldList = sl.getFieldList(filename)
+    rowAsDict = dict(zip(fieldList, colval))
+    return rowAsDict
 
 
 def splitIntoVal(row:str,delimiter:str,quotechar:str):
