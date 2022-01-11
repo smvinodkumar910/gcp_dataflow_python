@@ -12,9 +12,11 @@ mydataflow/configuration/SchemaLoad.py
 mydataflow/configuration/TestGcpAccess.py
 mydataflow/configuration/__init__.py
 mydataflow/configuration/pathconfig.py
+mydataflow/dataflow/ApiToBq.py
 mydataflow/dataflow/CsvToBq.py
 mydataflow/dataflow/Wordcount.py
 mydataflow/dataflow/__init__.py
 mydataflow/dataflow/checkimport.py
 mydataflow/resources/ANNUAL_ENTERPRISE_SURVEY.json
+mydataflow/resources/API_DATA.json
 mydataflow/resources/__init__.py

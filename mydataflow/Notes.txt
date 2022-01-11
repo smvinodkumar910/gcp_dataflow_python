@@ -19,3 +19,11 @@ python3 -m \
     --project mynewdevenv \
     --temp_location gs://mynewdevenv-bucket/python/temp/ \
     --setup_file ./setup.py
+
+python3 -m \
+    mydataflow.dataflow.ApiToBq \
+    --region us-central1 \
+    --runner DataflowRunner \
+    --project mynewdevenv \
+    --temp_location gs://mynewdevenv-bucket/python/temp/ \
+    --setup_file ./setup.py
