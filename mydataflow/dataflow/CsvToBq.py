@@ -31,9 +31,12 @@ from apache_beam.io.gcp.bigquery import BigQueryDisposition
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
-from mydataflow.configuration.SchemaLoad import getSchema
+from mydataflow.configuration.SchemaLoad import SchemaLoad as sl
+import mydataflow.Utilities.StringOperations as so
 
 import os
+
+filename = 'ANNUAL_ENTERPRISE_SURVEY.json'
 
 class CsvToJsonDoFn(beam.DoFn):
   """Parse each line of input text into Json"""
@@ -48,8 +51,15 @@ class CsvToJsonDoFn(beam.DoFn):
     Returns:
       The processed element.
     """
-    
-    return re.findall(r'[\w\']+', element, re.UNICODE)
+    colval=[]
+    if '"' in element:
+      colval=so.splitIntoVal(element,',','"')
+    else:
+      colval=element.split(',')
+      
+    fieldList = sl.getFieldList(filename)
+    rowAsDict = dict(zip(fieldList, colval))
+    return rowAsDict
 
 
 def run(argv=None, save_main_session=True):
@@ -75,13 +85,12 @@ def run(argv=None, save_main_session=True):
 
     # Read the text file[pattern] into a PCollection.
     lines = p | 'Read' >> ReadFromText(known_args.input)
-    dicts = lines | 'Convert to Dicts' >> (beam.ParDo(CsvToJsonDoFn()).with_output_types(dict))
-    dicts | 'write to bigquery' >> beam.io.WriteToBigQuery( table='mynewdevenv:DATAFLOW_LOAD.API_PARAMETER_TEST' ,
-    schema= getSchema(), create_disposition=BigQueryDisposition.CREATE_IF_NEEDED,
+    dicts = lines | 'Convert to Dicts' >> (beam.ParDo(CsvToJsonDoFn()))
+    dicts | 'write to bigquery' >> beam.io.WriteToBigQuery( table='mynewdevenv:DATAFLOW_LOAD.ANNUAL_ENTERPRISE_SURVEY' ,
+    schema= sl.getSchema(filename), create_disposition=BigQueryDisposition.CREATE_IF_NEEDED,
     write_disposition=BigQueryDisposition.WRITE_APPEND)
 
 
 if __name__ == '__main__':
   logging.getLogger().setLevel(logging.INFO)
-  schema=getSchema('ANNUAL_ENTERPRISE_SURVEY.json')
-  print(schema)
+  run()

@@ -7,6 +7,8 @@ import sys
 
 class SchemaLoad :
 
+
+
     #returns schema as dict
     def getSchema(filename:str)->dict:
         r = open(os.path.join(ROOT_DIR, 'resources', filename))
@@ -14,8 +16,8 @@ class SchemaLoad :
         return data
     
     #returns fields names as a list
-    def getFieldList():
-        r = open(os.path.join(ROOT_DIR, 'resources', 'ANNUAL_ENTERPRISE_SURVEY.json'))
+    def getFieldList(filename:str):
+        r = open(os.path.join(ROOT_DIR, 'resources', filename))
         data = dict(json.load(r))
         r.close
         fieldList = list(data.get('fields'))

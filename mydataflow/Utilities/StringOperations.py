@@ -1,18 +1,6 @@
 
-import mydataflow.configuration.pathconfig as config
-from mydataflow.configuration.SchemaLoad import SchemaLoad as sl
-import os
 
 
-def csvStringToDict():
-    filepath = os.path.join(config.ROOT_DIR,'resources' ,'annual-enterprise-survey-2020.csv' )
-    with open(filepath) as file:
-        filelines = file.readlines()
-    row = filelines[1]
-    vallist = splitIntoVal(row,',','"')
-    rowAsDict = dict(zip(sl.getFieldList('ANNUAL_ENTERPRISE_SURVEY.json'), vallist))
-    print(row)
-    print(rowAsDict)
 
 
 def splitIntoVal(row:str,delimiter:str,quotechar:str):
@@ -49,8 +37,3 @@ def splitIntoVal(row:str,delimiter:str,quotechar:str):
 
     return valuelist
     
-    
-if __name__=='__main__':
-    csvStringToDict()
-
-
