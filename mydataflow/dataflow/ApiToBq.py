@@ -34,34 +34,10 @@ from apache_beam.options.pipeline_options import SetupOptions
 from apache_beam.transforms.core import Create
 
 from mydataflow.configuration.SchemaLoad import SchemaLoad as sl
-import mydataflow.Utilities.StringOperations as so
 import requests
 
 
 filename = 'API_DATA.json'
-
-class CsvToJsonDoFn(beam.DoFn):
-  """Parse each line of input text into Json"""
-  def process(self, element:str):
-    """Returns an iterator over the words of this element.
-
-    The element is a line of text.  If the line is blank, note that, too.
-
-    Args:
-      element: the element being processed
-
-    Returns:
-      The processed element.
-    """
-    colval=[]
-    if '"' in element:
-      colval=so.splitIntoVal(element,',','"')
-    else:
-      colval=element.split(',')
-      
-    fieldList = sl.getFieldList(filename)
-    rowAsDict = dict(zip(fieldList, colval))
-    return [rowAsDict]
 
 def httpRequest():
     res = requests.get('https://gorest.co.in/public/v1/users')
