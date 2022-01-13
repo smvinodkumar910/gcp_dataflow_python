@@ -43,6 +43,12 @@ import os
 
 class CsvToJsonDoFn(beam.DoFn):
   """Parse each line of input text into Json"""
+  filename=''
+
+  def __init__(self, infilename:str):
+    self.filename = infilename
+        
+
   def process(self, element:str):
     """Returns an iterator over the words of this element.
 
@@ -88,6 +94,7 @@ def run(argv=None, save_main_session=True):
   templocation = loaddtl.get('tempLocationPath')
   sourcefilepath = loaddtl.get('sourcefilepath')
 
+  #Schema file name
   filename = '{0}.json'.format(tableid)
   tableref = '{0}:{1}.{2}'.format(projectid,datasetid,tableid)
   
@@ -101,7 +108,7 @@ def run(argv=None, save_main_session=True):
 
     # Read the text file[pattern] into a PCollection.
     lines = p | 'Read' >> ReadFromText(sourcefilepath, skip_header_lines =1)
-    dicts = lines | 'Convert to Dicts' >> (beam.ParDo(CsvToJsonDoFn()))
+    dicts = lines | 'Convert to Dicts' >> (beam.ParDo(CsvToJsonDoFn(filename)))
     dicts | 'write to bigquery' >> WriteToBigQuery( table=tableref ,
     schema= sl.getSchema(filename), create_disposition=BigQueryDisposition.CREATE_IF_NEEDED,
     write_disposition=BigQueryDisposition.WRITE_APPEND)
