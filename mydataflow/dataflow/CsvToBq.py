@@ -34,10 +34,12 @@ from apache_beam.options.pipeline_options import SetupOptions
 
 from mydataflow.configuration.SchemaLoad import SchemaLoad as sl
 import mydataflow.Utilities.StringOperations as so
+from mydataflow.configuration.AppProperties import AppProperties as app
 
 import os
 
-filename = 'ANNUAL_ENTERPRISE_SURVEY.json'
+
+
 
 class CsvToJsonDoFn(beam.DoFn):
   """Parse each line of input text into Json"""
@@ -69,13 +71,26 @@ def run(argv=None, save_main_session=True):
   """Main entry point; defines and runs the wordcount pipeline."""
   parser = argparse.ArgumentParser()
   parser.add_argument(
-      '--input',
-      dest='input',
-      default='gs://mynewdevenv-bucket/SourceFiles/annual-enterprise-survey-2020.csv',
-      help='Input file to process.')
+      '--jobparams',
+      dest='jobparams',
+      default='annualsurvey',
+      help='application properties file setment value to identify job parameters')
   
   known_args, pipeline_args = parser.parse_known_args(argv)
+  
+  gcpdtl = app.getProperty('gcp')
+  loaddtl = app.getProperty(known_args.jobparams)
 
+  projectid = gcpdtl.get('projectid')
+  datasetid = gcpdtl.get('datasetid')
+
+  tableid = loaddtl.get('tableid')
+  templocation = loaddtl.get('tempLocationPath')
+  sourcefilepath = loaddtl.get('sourcefilepath')
+
+  filename = '{0}.json'.format(tableid)
+  tableref = '{0}:{1}.{2}'.format(projectid,datasetid,tableid)
+  
   # We use the save_main_session option because one or more DoFn's in this
   # workflow rely on global context (e.g., a module imported at module level).
   pipeline_options = PipelineOptions(pipeline_args)
@@ -85,9 +100,9 @@ def run(argv=None, save_main_session=True):
   with beam.Pipeline(options=pipeline_options) as p:
 
     # Read the text file[pattern] into a PCollection.
-    lines = p | 'Read' >> ReadFromText(known_args.input, skip_header_lines =1)
+    lines = p | 'Read' >> ReadFromText(sourcefilepath, skip_header_lines =1)
     dicts = lines | 'Convert to Dicts' >> (beam.ParDo(CsvToJsonDoFn()))
-    dicts | 'write to bigquery' >> beam.io.WriteToBigQuery( table='mynewdevenv:DATAFLOW_LOAD.ANNUAL_ENTERPRISE_SURVEY' ,
+    dicts | 'write to bigquery' >> WriteToBigQuery( table=tableref ,
     schema= sl.getSchema(filename), create_disposition=BigQueryDisposition.CREATE_IF_NEEDED,
     write_disposition=BigQueryDisposition.WRITE_APPEND)
 

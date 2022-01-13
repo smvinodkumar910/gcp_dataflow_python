@@ -3,11 +3,9 @@
 from .pathconfig import ROOT_DIR
 import os
 import json
-import sys
+
 
 class SchemaLoad :
-
-
 
     #returns schema as dict
     def getSchema(filename:str)->dict:

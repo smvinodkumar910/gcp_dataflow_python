@@ -34,13 +34,14 @@ from apache_beam.options.pipeline_options import SetupOptions
 from apache_beam.transforms.core import Create
 
 from mydataflow.configuration.SchemaLoad import SchemaLoad as sl
+from mydataflow.configuration.AppProperties import AppProperties as app
 import requests
 
 
 filename = 'API_DATA.json'
 
-def httpRequest():
-    res = requests.get('https://gorest.co.in/public/v1/users')
+def httpRequest(url:str):
+    res = requests.get(url)
     response = dict(res.json()).get('data')
     return list(response)
 
@@ -49,9 +50,27 @@ def run(argv=None, save_main_session=True):
 
   """Main entry point; defines and runs the wordcount pipeline."""
   parser = argparse.ArgumentParser()
+  parser.add_argument(
+      '--jobparams',
+      dest='jobparams',
+      default='apidataload',
+      help='application properties file setment value to identify job parameters')
   
   known_args, pipeline_args = parser.parse_known_args(argv)
+  
+  gcpdtl = app.getProperty('gcp')
+  loaddtl = app.getProperty(known_args.jobparams)
 
+  projectid = gcpdtl.get('projectid')
+  datasetid = gcpdtl.get('datasetid')
+
+  tableid = loaddtl.get('tableid')
+  templocation = loaddtl.get('tempLocationPath')
+  apiurl = loaddtl.get('URL')
+
+  filename = '{0}.json'.format(tableid)
+  tableref = '{0}:{1}.{2}'.format(projectid,datasetid,tableid)
+  
   # We use the save_main_session option because one or more DoFn's in this
   # workflow rely on global context (e.g., a module imported at module level).
   pipeline_options = PipelineOptions(pipeline_args)
@@ -61,9 +80,9 @@ def run(argv=None, save_main_session=True):
   with beam.Pipeline(options=pipeline_options) as p:
 
     # Read the text file[pattern] into a PCollection.
-    lines = p | 'Read' >> Create(httpRequest())
+    lines = p | 'Read' >> Create(httpRequest(apiurl))
     #dicts = lines | 'Convert to Dicts' >> (beam.ParDo(CsvToJsonDoFn()))
-    lines | 'write to bigquery' >> beam.io.WriteToBigQuery( table='mynewdevenv:DATAFLOW_LOAD.API_DATA' ,
+    lines | 'write to bigquery' >> beam.io.WriteToBigQuery( table=tableref ,
     schema= sl.getSchema(filename), create_disposition=BigQueryDisposition.CREATE_IF_NEEDED,
     write_disposition=BigQueryDisposition.WRITE_APPEND)
 
