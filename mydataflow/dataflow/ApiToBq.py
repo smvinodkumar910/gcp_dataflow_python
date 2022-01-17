@@ -29,13 +29,14 @@ from apache_beam.io import ReadFromText
 from apache_beam.io import WriteToText
 from apache_beam.io import WriteToBigQuery
 from apache_beam.io.gcp.bigquery import BigQueryDisposition
-from apache_beam.options.pipeline_options import PipelineOptions
+from apache_beam.options.pipeline_options import GoogleCloudOptions, PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 from apache_beam.transforms.core import Create
 
 from mydataflow.configuration.SchemaLoad import SchemaLoad as sl
 from mydataflow.configuration.AppProperties import AppProperties as app
 import requests
+import datetime
 
 
 filename = 'API_DATA.json'
@@ -58,6 +59,11 @@ def run(argv=None, save_main_session=True):
   
   known_args, pipeline_args = parser.parse_known_args(argv)
   
+
+  timenow = (datetime.datetime.now())
+  jobname = 'apitobq-'+timenow.strftime('%Y-%m-%d-%H%M%S')
+  pipeline_args.append("--job_name={0}".format(jobname))
+  
   gcpdtl = app.getProperty('gcp')
   loaddtl = app.getProperty(known_args.jobparams)
 
@@ -70,11 +76,11 @@ def run(argv=None, save_main_session=True):
 
   filename = '{0}.json'.format(tableid)
   tableref = '{0}:{1}.{2}'.format(projectid,datasetid,tableid)
-  
+
   # We use the save_main_session option because one or more DoFn's in this
   # workflow rely on global context (e.g., a module imported at module level).
   pipeline_options = PipelineOptions(pipeline_args)
-  pipeline_options.view_as(SetupOptions).save_main_session = save_main_session
+  pipeline_options.view_as(GoogleCloudOptions) #.save_main_session = save_main_session
   
   # The pipeline will be run on exiting the with block.
   with beam.Pipeline(options=pipeline_options) as p:

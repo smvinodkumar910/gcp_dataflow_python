@@ -8,6 +8,7 @@ mydataflow.egg-info/requires.txt
 mydataflow.egg-info/top_level.txt
 mydataflow/Utilities/StringOperations.py
 mydataflow/Utilities/__init__.py
+mydataflow/configuration/AppProperties.py
 mydataflow/configuration/SchemaLoad.py
 mydataflow/configuration/TestGcpAccess.py
 mydataflow/configuration/__init__.py
@@ -19,4 +20,3 @@ mydataflow/dataflow/__init__.py
 mydataflow/dataflow/checkimport.py
 mydataflow/resources/ANNUAL_ENTERPRISE_SURVEY.json
 mydataflow/resources/API_DATA.json
-mydataflow/resources/__init__.py

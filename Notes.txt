@@ -14,11 +14,11 @@ python3 -m \
 python3 -m \
     mydataflow.dataflow.CsvToBq \
     --region us-central1 \
-    --input gs://mynewdevenv-bucket/SourceFiles/annual-enterprise-survey-2020.csv \
     --runner DataflowRunner \
     --project mynewdevenv \
     --temp_location gs://mynewdevenv-bucket/python/temp/ \
-    --setup_file ./setup.py
+    --setup_file ./setup.py \
+    --jobparams annualsurvey
 
 python3 -m \
     mydataflow.dataflow.ApiToBq \
@@ -26,4 +26,5 @@ python3 -m \
     --runner DataflowRunner \
     --project mynewdevenv \
     --temp_location gs://mynewdevenv-bucket/python/temp/ \
-    --setup_file ./setup.py
+    --setup_file ./setup.py \
+    --jobparams apidataload
