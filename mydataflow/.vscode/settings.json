@@ -1,5 +1,6 @@
 {
     "python.analysis.extraPaths": [
-        "/home/vinod/VSCodeWorkspace/GCPTraining_Python/"
+        "/home/smvinod/.pyvenvs/dataflowenv"
     ]
+    
 }
