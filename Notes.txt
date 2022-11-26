@@ -27,4 +27,5 @@ python3 -m \
     --project mynewdevenv \
     --temp_location gs://mynewdevenv-bucket/python/temp/ \
     --setup_file ./setup.py \
-    --jobparams apidataload
+    --jobparams apidataload \
+    ‑‑prebuild_sdk_container_engine=cloud_build
