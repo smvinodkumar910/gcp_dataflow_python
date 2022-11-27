@@ -37,6 +37,12 @@ python3 -m \
     3. Build docker image
        gcloud builds submit --tag us-docker.pkg.dev/mynewdevenv/gcr.io/dataflow/sample_python:latest .
 
-       artifactregistry.repositories.uploadArtifacts
+    4. Create flex template :
+        gcloud dataflow flex-template build gs://mynewdevenv-bucket/sample_python_flex_template.json \
+     --image "us-docker.pkg.dev/mynewdevenv/gcr.io/dataflow/sample_python:latest" \
+     --sdk-language "PYTHON" \
+     --metadata-file "mydataflow_metadata"
 
-       gcr.io/mynewdevenv
+    artifactregistry.repositories.uploadArtifacts
+
+    gcr.io/mynewdevenv
