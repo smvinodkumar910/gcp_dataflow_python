@@ -1,9 +1,9 @@
 
 from time import strftime
-import mydataflow.configuration.pathconfig as config
-from mydataflow.configuration.SchemaLoad import SchemaLoad as sl
+import configuration.pathconfig as config
+from configuration.SchemaLoad import SchemaLoad as sl
 import os
-import mydataflow.Utilities.StringOperations as so
+import Utilities.StringOperations as so
 import requests
 import datetime
 

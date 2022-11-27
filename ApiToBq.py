@@ -33,8 +33,8 @@ from apache_beam.options.pipeline_options import GoogleCloudOptions, PipelineOpt
 from apache_beam.options.pipeline_options import SetupOptions
 from apache_beam.transforms.core import Create
 
-from mydataflow.configuration.SchemaLoad import SchemaLoad as sl
-from mydataflow.configuration.AppProperties import AppProperties as app
+from configuration.SchemaLoad import SchemaLoad as sl
+from configuration.AppProperties import AppProperties as app
 import requests
 import datetime
 

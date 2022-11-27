@@ -1,6 +1,0 @@
-{
-    "python.analysis.extraPaths": [
-        "/home/smvinod/.pyvenvs/dataflowenv"
-    ]
-    
-}

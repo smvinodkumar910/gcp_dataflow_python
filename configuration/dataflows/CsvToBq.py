@@ -33,9 +33,9 @@ from apache_beam.io.gcp.bigquery import BigQueryDisposition
 from apache_beam.options.pipeline_options import GoogleCloudOptions, PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
-from mydataflow.configuration.SchemaLoad import SchemaLoad as sl
-import mydataflow.Utilities.StringOperations as so
-from mydataflow.configuration.AppProperties import AppProperties as app
+from configuration.SchemaLoad import SchemaLoad as sl
+import Utilities.StringOperations as so
+from configuration.AppProperties import AppProperties as app
 
 import os
 
