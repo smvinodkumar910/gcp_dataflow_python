@@ -6,7 +6,7 @@ import json
 class AppProperties():
 
     def getProperty(propertyName:str)->dict:
-        r = open(os.path.join(ROOT_DIR, 'resources', 'application.json'))
+        r = open(os.path.join(ROOT_DIR, 'configuration', 'resources', 'application.json'))
         data = dict(json.load(r))
         r.close()
         return data.get(propertyName)
