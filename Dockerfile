@@ -5,11 +5,8 @@ RUN mkdir -p ${WORKDIR}
 WORKDIR ${WORKDIR}
 
 COPY mydataflow .
-COPY setup.py .
-COPY ApiToBq.py .
-COPY configuration .
 
-ENV FLEX_TEMPLATE_PYTHON_SETUP_FILE="${WORKDIR}/setup.py"
-ENV FLEX_TEMPLATE_PYTHON_PY_FILE="${WORKDIR}/ApiToBq.py"
+ENV FLEX_TEMPLATE_PYTHON_SETUP_FILE="${WORKDIR}/mydataflow/setup.py"
+ENV FLEX_TEMPLATE_PYTHON_PY_FILE="${WORKDIR}/mydataflow/ApiToBq.py"
 
 RUN pip install apache-beam[gcp]
