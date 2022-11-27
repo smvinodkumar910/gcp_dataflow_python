@@ -47,6 +47,8 @@ def httpRequest(url:str):
     return list(response)
 
 def run(argv=None, save_main_session=True):
+  from configuration.SchemaLoad import SchemaLoad as sl
+  from configuration.AppProperties import AppProperties as app
   
 
   """Main entry point; defines and runs the wordcount pipeline."""
