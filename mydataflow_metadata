@@ -1,0 +1,11 @@
+{
+    "name": "Sample python dataflow flex template",
+    "description": "Sample python dataflow ",
+    "parameters": [
+      {
+        "name": "jobparams",
+        "label": "parameter to get job details",
+        "helpText": "parameter to get job details",
+      }
+    ]
+  }

@@ -29,3 +29,14 @@ python3 -m \
     --setup_file ./setup.py \
     --jobparams apidataload \
     ‑‑prebuild_sdk_container_engine=cloud_build
+
+
+    1. Create Docker file
+    2. configure docker in cloud shell
+        gcloud auth configure-docker REGION-docker.pkg.dev
+    3. Build docker image
+       gcloud builds submit --tag us-docker.pkg.dev/mynewdevenv/gcr.io/dataflow/sample_python:latest .
+
+       artifactregistry.repositories.uploadArtifacts
+
+       gcr.io/mynewdevenv
