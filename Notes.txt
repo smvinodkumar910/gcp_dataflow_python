@@ -48,6 +48,7 @@ python3 -m \
      gcloud dataflow flex-template run "pythonflextemplate`date +%Y%m%d-%H%M%S`" \
     --template-file-gcs-location "gs://mynewdevenv-bucket/sample_python_flex_template.json" \
     --parameters jobparams="apidataload" \
+    --parameters setup_file="/dataflow/template/mydataflow/setup.py" \
     --region "us-west1"
 
     artifactregistry.repositories.uploadArtifacts

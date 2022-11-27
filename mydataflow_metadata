@@ -6,6 +6,11 @@
         "name": "jobparams",
         "label": "parameter to get job details",
         "helpText": "parameter to get job details"
+      },
+      {
+        "name": "setup_file",
+        "label": "setup file call",
+        "helpText": "setup file call"
       }
     ]
   }
