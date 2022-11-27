@@ -7,7 +7,7 @@ setuptools.setup(
     author='Vinodkumar M',
     author_email='smvinodkumar910@gmail.com',
     description='Mydataflow to run jobs in GCP',
-    install_requires=['apache-beam==2.35.0',],
+    install_requires=['requests==2.27.0'],
     package_data={'mydataflow.resources': ['*.json']},
     include_package_data=True,
     packages=setuptools.find_packages(),
