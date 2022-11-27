@@ -6,7 +6,8 @@ WORKDIR ${WORKDIR}
 
 COPY requirements.txt .
 COPY setup.py .
-COPY mydataflow .
+COPY ApiToBq.py .
+COPY configuration .
 
 ENV FLEX_TEMPLATE_PYTHON_SETUP_FILE="${WORKDIR}/setup.py"
 ENV FLEX_TEMPLATE_PYTHON_PY_FILE="${WORKDIR}/ApiToBq.py"
