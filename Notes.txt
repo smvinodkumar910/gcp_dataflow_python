@@ -43,6 +43,13 @@ python3 -m \
      --sdk-language "PYTHON" \
      --metadata-file "mydataflow_metadata"
 
+     5. Run with Flex Template :
+
+     gcloud dataflow flex-template run "pythonflextemplate`date +%Y%m%d-%H%M%S`" \
+    --template-file-gcs-location "gs://mynewdevenv-bucket/sample_python_flex_template.json" \
+    --parameters jobparams="apidataload" \
+    --region "us-west1"
+
     artifactregistry.repositories.uploadArtifacts
 
     gcr.io/mynewdevenv

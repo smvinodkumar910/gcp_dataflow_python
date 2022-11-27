@@ -4,7 +4,7 @@ ARG WORKDIR=/dataflow/template
 RUN mkdir -p ${WORKDIR}
 WORKDIR ${WORKDIR}
 
-COPY requirements.txt .
+COPY mydataflow .
 COPY setup.py .
 COPY ApiToBq.py .
 COPY configuration .
